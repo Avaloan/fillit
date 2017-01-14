@@ -58,7 +58,7 @@ void print_list(x_list *elem, head sentinel)
 	while (elem)
 	{
 		ft_putstr(elem->data);
-		ft_putchar('\n');
+		ft_putstr("\n\n");
 		elem = elem->prev;
 	}
 }
@@ -69,7 +69,6 @@ char *cut_piece(char *buf)
 	int j;
 	unsigned int start;
 	size_t len;
-	char *str2;
 
 	i = 0;
 	j = 0;
@@ -83,26 +82,8 @@ char *cut_piece(char *buf)
 			j++;
 		i++;
 	}
-	/*ft_putstr("start = ");
-	ft_putnbr(start);
-	ft_putchar('\n');
-	ft_putstr("i = ");
-	ft_putnbr(i);
-	ft_putchar('\n');*/
 	len = ((size_t)i - (size_t)start);
-	/*ft_putstr("Len = ");
-	ft_putnbr(len);
-	ft_putchar('\n');*/
-	str2 = ft_strsub(buf, start, len);
-	int h = 0;
-	/*while (start < i)
-	{
-		str2[h] = buf[start];
-		//ft_putchar(*str2);
-		start++;
-		h++;
-	}*/
-	return (str2);
+	return (ft_strsub(buf, start, len));
 }
 
 x_list *read_and_copy(char *argv, head *sentinel, x_list *elem)
@@ -118,7 +99,7 @@ x_list *read_and_copy(char *argv, head *sentinel, x_list *elem)
 			if (ft_checksquare(buf) == 1 && ft_checkpiece(buf) == 1)
 			{
 				elem = add_node(elem, cut_piece(buf), sentinel);
-				elem->piece = (sentinel->lenght + 65);
+				elem->piece = (sentinel->lenght + 64);
 			}
 			else
 			{
@@ -131,6 +112,28 @@ x_list *read_and_copy(char *argv, head *sentinel, x_list *elem)
 	return (sentinel->first_element);
 }
 
+void hashtag_to_alpha(x_list *elem)
+{
+	int i = 0;
+	while (elem)
+	{
+		while(elem->data[i])
+		{
+			if (elem->data[i] == '#')
+			{
+				elem->data[i] = elem->piece;
+				//ft_putchar(elem->piece);
+				//ft_putchar('\n');
+			}
+			i++;
+		}
+		i = 0;
+		elem = elem->prev;
+	}
+}
+
+
+
 int main(int argc, char **argv)
 {
 	x_list *elem;
@@ -138,5 +141,6 @@ int main(int argc, char **argv)
 	elem = NULL;
 
 	elem = read_and_copy(argv[1], &sentinel, elem);
+	hashtag_to_alpha(elem);
 	print_list(elem, sentinel);
 }
